@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="change.crm.mapper.ChanceMapper">
+
+	<insert id="saveObject" parameterType="chance">
+		insert into t_sale_chance
+		
+		values(null,#{chanceSource},#{customerName},#{cgjl},#{overview},#{linkMan},#{linkPhone},#{description},#{createMan},#{createTime},#{assignMan},#{assignTime},#{state},#{devResult})
+	</insert>
+	
+	<!-- 定义基本的sql语句 -->
+	<sql id="baseSql">
+		select * from t_sale_chance
+	</sql>
+	<!-- 根据id查询单个实体对象 -->
+	<select id="getObjectById" parameterType="int" resultType="chance">
+		<!-- 引入指定的sql语句 -->
+		<include refid="baseSql" />
+		where id=#{id}
+	</select>
+	
+	<!-- 根据name查询单个实体对象 -->
+	<select id="getObjectsByName" parameterType="string" resultType="chance">
+		<!-- 引入指定的sql语句 -->
+		<include refid="baseSql" />
+		where name=#{name}
+	</select>
+	
+	
+	<update id="updateObject" parameterType="chance">
+		update t_sale_chance
+		<set>
+			<if test="chanceSource!=null and chanceSource!='' ">
+				chanceSource = #{chanceSource},
+			</if>
+			<if test="customerName!=null and customerName!='' ">
+				customerName = #{customerName},
+			</if>
+			<if test="cgjl!=0">
+				cgjl = #{cgjl},
+			</if>
+			<if test="linkMan!=null and linkMan!='' ">
+				linkMan = #{linkMan},
+			</if>
+			<if test="linkPhone!=null and linkPhone!='' ">
+				linkPhone = #{linkPhone},
+			</if>
+			<if test="description!=null and description!='' ">
+				description = #{description},
+			</if>
+			<if test="createMan!=null and createMan!='' ">
+				createMan = #{createMan},
+			</if>
+			<if test="createTime!=null">
+				createTime = #{createTime},
+			</if>
+			<if test="assignMan!=null and assignMan!='' ">
+				assignMan = #{assignMan},
+			</if>
+			<if test="assignTime!=null">
+				assignTime = #{assignTime},
+			</if>
+			<if test="state!=null">
+				state = #{state},
+			</if>
+			<if test="devResult!=null">
+				devResult = #{devResult},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+
+	<select id="getObjects" parameterType="queryVo" resultType="chance">
+		<!-- 引入指定的sql语句 -->
+		<include refid="baseSql" />
+		<where>
+			<!-- 拼接sql语句 -->
+			<if test="entity!=null">
+			<if test="entity.state!=null">
+				and state = #{entity.state} 
+			</if>
+			<if test="entity.linkMan!=null">
+				and linkMan like '%${entity.linkMan}%'
+			</if>
+			<if test="entity.devResult!=null">
+				and devResult = #{entity.devResult} 
+			</if>
+			</if>
+		</where>
+
+		<!-- 排序的操作 -->
+		<if test="sort!=null and desc!=null">
+			order by ${sort} ${desc}
+		</if>
+		<!-- 分页拼装 -->
+		<if test="startSize!=null and pageSize!=null">
+			limit #{startSize},#{pageSize}
+		</if>
+	</select>
+
+	<select id="getObjectsSize" parameterType="queryVo" resultType="int">
+		<!-- 引入指定的sql语句 -->
+		select count(*) from t_sale_chance
+		<where>
+			<!-- 拼接sql语句 -->
+			
+		</where>
+	</select>
+</mapper>
+

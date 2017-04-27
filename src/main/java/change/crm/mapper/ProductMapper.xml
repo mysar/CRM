@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="change.crm.mapper.ProductMapper">
+
+	<!-- 定义基本的sql语句 -->
+	<sql id="baseProductSql">
+		 select id,productName,model,unit,price,store,remark from t_product 
+	</sql>
+
+	<!-- 普通插入的操作实现 -->
+	<insert id="saveObject" parameterType="product">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into t_product
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="productName!=null and productName!=''">productName ,</if>
+			<if test="model!=null and model!=''">model ,</if>
+			<if test="unit!=null and unit!=''">unit ,</if>
+			<if test="price!=null and price!=''">price ,</if>
+			<if test="store!=null and store!=''">store ,</if>
+			<if test="remark!=null and remark!=''">remark </if>
+		</trim>
+		<trim prefix="values(" suffix=")" suffixOverrides=",">
+			<if test="productName!=null and productName!=''">#{productName} ,</if>
+			<if test="model!=null and model!=''">#{model} ,</if>
+			<if test="unit!=null and unit!=''">#{unit },</if>
+			<if test="price!=null and price!=''">#{price} ,</if>
+			<if test="store!=null and store!=''">#{store} ,</if>
+			<if test="remark!=null and remark!=''">#{remark} </if>
+		
+		</trim>
+	</insert>
+
+	<update id="updateObject" parameterType="product">
+		update t_product
+		<trim prefix="set" suffix=" where " suffixOverrides=",">
+			<if test="productName!=null and productName!=''">productName=#{productName} ,</if>
+			<if test="model!=null and model!=''">model=#{model} ,</if>
+			<if test="unit!=null and unit!=''">unit=#{unit },</if>
+			<if test="price!=null and price!=''">price=#{price} ,</if>
+			<if test="store!=null and store!=''">store=#{store} ,</if>
+			<if test="remark!=null and remark!=''">remark=#{remark} </if>
+		</trim>
+		id= #{id}
+	</update>
+
+	<!-- 根据实体对象删除实体 -->
+	<delete id="deleteObject" parameterType="product">
+		delete from t_product where id = #{id}
+	</delete>
+	<!-- 根据id删除实体 -->
+	<delete id="deleteObjectById" parameterType="int">
+		delete from t_product where id = #{id}
+	</delete>
+
+
+
+	<!-- 根据id查询单个实体对象 -->
+	<select id="getObjectById" parameterType="int" resultType="product">
+		<!-- 引入指定的sql语句 -->
+		<include refid="baseProductSql" />
+		where id=#{id} 
+	</select>
+	<!-- 带条件的获取所有数据 -->
+	<select id="getObjects" parameterType="queryVo" resultType="product">
+		<!-- 引入指定的sql语句 -->
+		<include refid="baseProductSql" />
+		<where>
+			<!-- 拼接sql语句 -->
+			<if test="entity!=null">
+				<if test="entity.productName!=null and entity.productName!=''">
+					and productName like '%${entity.productName}%'
+				</if>
+				<!-- 其它条件 -->
+				<if test="entity.model!=null and entity.model!=''">
+					and model like '%${entity.model}%'
+				</if>
+				<if test="entity.unit!=null and entity.unit!=''">
+					and  unit like '%${entity.unit}%'
+				</if>
+			</if>
+		</where>
+
+		<!-- 排序的操作 -->
+		<if test="sort!=null and desc!=null">
+			order by ${sort} ${desc}
+		</if>
+		<!-- 分页拼装 -->
+		<if test="startSize!=null and pageSize!=null">
+			limit #{startSize},#{pageSize}
+		</if>
+	</select>
+
+<!-- 带条件的获取总计路数 -->
+	<select id="getObjectsSize" parameterType="queryVo" resultType="int">
+		<!-- 引入指定的sql语句 -->
+		select count(*) from t_product
+		<where>
+			<!-- 拼接sql语句 -->
+			<if test="entity!=null">
+				<if test="entity.productName!=null and entity.productName!=''">
+					and productName like '%${entity.productName}%'
+				</if>
+				<!-- 其它条件 -->
+				<if test="entity.model!=null and entity.model!=''">
+					and model like '%${entity.model}%'
+				</if>
+				<if test="entity.unit!=null and entity.unit!=''">
+					and  unit like '%${entity.unit}%'
+				</if>
+			</if>
+		</where>
+	</select>
+
+
+</mapper>

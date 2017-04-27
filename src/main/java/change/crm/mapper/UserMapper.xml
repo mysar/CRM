@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="change.crm.mapper.UserMapper">
+
+	<!-- 基本类型sql语句 -->
+	<sql id="baseUserSql">
+		select id,userName,password,trueName,email,phone,roleName
+		from t_user
+	</sql>
+
+	<!-- 根据id查询 -->
+	<select id="getObjectById" parameterType="int" resultType="user">
+		<include refid="baseUserSql" />
+		where id=#{id}
+	</select>
+
+	<!-- 查询所有信息 -->
+	<select id="getObjects" parameterType="queryVo" resultType="user">
+		<include refid="baseUserSql" />
+		<!-- 拼接sql语句 -->
+		<where>
+			<!-- 拼接sql语句 -->
+			<if test="entity!=null">
+				<if test="entity.userName!=null">
+					and userName like '%${entity.userName}%'
+				</if>
+				<!-- 其它条件 -->
+				<if test="entity.email!=null">
+					and email like '%${entity.email}%'
+				</if>
+				<if test="entity.phone!=null">
+					and phone like '%${entity.phone}%'
+				</if>
+				<if test="entity.trueName!=null">
+					and trueName like '%${entity.trueName}%'
+				</if>
+				<if test="entity.roleName!=null">
+					and roleName like '%${entity.roleName}%'
+				</if>
+			</if>
+		</where>
+		<!-- 排序的操作 -->
+		<if test="sort!=null and desc!=null">
+			order by ${sort} ${desc}
+		</if>
+		<!-- 分页拼装 -->
+		<if test="startSize!=null and pageSize!=null">
+			limit #{startSize},#{pageSize}
+		</if>
+	</select>
+
+	<!-- 获取总记录数 -->
+	<select id="getObjectsSize" parameterType="queryVo" resultType="int">
+		<!-- 引入指定的sql语句 -->
+		select count(*) from t_user
+		<where>
+			<!-- 拼接sql语句 -->
+			<if test="entity!=null">
+				<if test="entity.userName!=null">
+					and userName like '%${entity.userName}%'
+				</if>
+				<!-- 其它条件 -->
+				<if test="entity.email!=null">
+					and email like '%${entity.email}%'
+				</if>
+				<if test="entity.phone!=null">
+					and phone like '%${entity.phone}%'
+				</if>
+				<if test="entity.trueName!=null">
+					and trueName like '%${entity.trueName}%'
+				</if>
+			</if>
+		</where>
+	</select>
+
+
+	<!-- 根据id更新数据 -->
+	<!-- <update id="updateById" parameterType="user">
+		update t_user
+		
+		<where>
+			id=#{id}
+		</where>
+	</update> -->
+
+
+
+	<!-- 单表添加数据 -->
+	<!-- <insert id="saveObject" parameterType="user">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			select
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="admin!=null">admin ,</if>
+			<if test="name!=null">name ,</if>
+			<if test="userName!=null">userName ,</if>
+			<if test="passWord!=null">passWord ,</if>
+			<if test="telbind!=null">telbind ,</if>
+			<if test="phone!=null">phone ,</if>
+			<if test="registTime!=null">registTime ,</if>
+			<if test="email!=null">email ,</if>
+			<if test="state!=null">state ,</if>
+			<if test="sex!=null">sex </if>
+		</trim>
+		<trim prefix="values(" suffix=")" suffixOverrides=",">
+			<if test="name!=null">#{name} ,</if>
+			<if test="sex!=null">#{sex} ,</if>
+			<if test="email!=null">#{email} ,</if>
+			<if test="admin!=null">#{admin},</if>
+			<if test="userName!=null">#{userName},</if>
+			<if test="passWord!=null">#{passWord},</if>
+			<if test="phone!=null">#{phone} ,</if>
+			<if test="state!=null">#{state} ,</if>
+			<if test="telbind!=null">#{telbind} ,</if>
+			<if test="registTime!=null">#{registTime} </if>
+		</trim>
+	</insert> -->
+
+	<!-- 根据id删除信息 -->
+	<delete id="deleteObject" parameterType="Integer">
+		<!-- 删除之前应该判断这个数组不为空 -->
+		<!-- delete from user where id in <foreach open="(" close=")" collection="array" 
+			item="item" separator=",">${item}</foreach> -->
+		delete from t_user
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<!-- 获取总记录数 -->
+	<select id="checkName" parameterType="String" resultType="user">
+		<!-- 引入指定的sql语句 -->
+		select password from t_user where userName = #{userName,jdbcType=VARCHAR}
+		
+	</select>
+	
+	
+	
+	
+</mapper>

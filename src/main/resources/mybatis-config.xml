@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<!-- 设置全局操作（设置二级缓存） -->
+	<!-- 对在此配置文件下的所有cache 进行全局性开/关设置 -->
+	<!-- <settings> <setting name="cacheEnabled" value="true" /> </settings> -->
+    
+  
+	<!-- 批量别名定义，扫描整个包下的类，别名为类名（首字母大写或小写都可以） -->
+	<typeAliases>
+		<package name="change.crm.model" />
+	</typeAliases>
+	
+</configuration>

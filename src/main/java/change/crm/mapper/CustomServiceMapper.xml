@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="change.crm.mapper.CustomServiceMapper">
+
+	<!-- 基本类型sql语句 -->
+	<sql id="baseCustomServiceSql">
+		select id,serveType,overview,customer,state,
+		servicerequest,createPeople,createTime,assigner,assignTime,serviceProce,serviceProcePeople,
+		serviceProceTime,serviceProceResult,myd from t_customer_service
+	</sql>
+
+	<!-- 根据id查询 -->
+	<select id="getObjectById" parameterType="int" resultType="customerService">
+		<include refid="baseCustomServiceSql" />
+		where id=#{id}
+	</select>
+
+	<!-- 查询所有信息 -->
+	<select id="getObjects" parameterType="queryVo" resultType="customerService">
+		<include refid="baseCustomServiceSql" />
+		<where>
+			<if test="entity!=null">
+				<if test="entity.customer!=null">
+					and customer like '%${entity.customer}%'
+				</if>
+				<if test="entity.overview!=null">
+					and overview like '%${entity.overview}%'
+				</if>
+				<!-- 客户服务类型 -->
+				<if test="entity.serveType!=null">
+					and serveType like '%${entity.serveType}%'
+				</if>
+			</if>
+		</where>
+
+	</select>
+
+
+	<!-- 获取总记录数 -->
+	<select id="getObjectsSize" parameterType="queryVo" resultType="int">
+		<!-- 引入指定的sql语句 -->
+		select count(*) from t_customer_service
+		<!-- <where> <if test="entity!=null"> <if test="entity.customer!=null"> 
+			and customer like '%${entity.customer}%' </if> <if test="entity.assigner!=null"> 
+			and assigner like '%${entity.assigner}%' </if> <if test="entity.serviceProcePeople!=null"> 
+			and serviceProcePeople like '%${entity.serviceProcePeople}%' </if> <if test="entity.createPeople!=null"> 
+			and createPeople like '%${entity.createPeople}%' </if> </if> </where> -->
+	</select>
+
+
+	<!-- 根据id更新数据 -->
+	<update id="updateById" parameterType="customerService">
+		update t_customer_service
+		<where>
+			id=#{id}
+		</where>
+	</update>
+
+
+
+
+	<!-- 根据id删除信息 -->
+	<delete id="deleteObject" parameterType="Integer">
+		<!-- 删除之前应该判断这个数组不为空 -->
+		<!-- delete from user where id in <foreach open="(" close=")" collection="array" 
+			item="item" separator=",">${item}</foreach> -->
+		delete from t_customer_service
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+
+
+
+
+
+
+
+	<insert id="saveObject" parameterType="customerService">
+		insert into t_customer_service
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="serveType != null">
+				serveType,
+			</if>
+			<if test="overview != null">
+				overview,
+			</if>
+			<if test="customer != null">
+				customer,
+			</if>
+			<if test="state != null">
+				state,
+			</if>
+			<if test="servicerequest != null">
+				servicerequest,
+			</if>
+			<if test="createPeople != null">
+				createPeople,
+			</if>
+			<if test="createTime != null">
+				createTime,
+			</if>
+			<if test="assigner != null">
+				assigner,
+			</if>
+			<if test="assignTime != null">
+				assignTime,
+			</if>
+			<if test="serviceProce != null">
+				serviceProce,
+			</if>
+			<if test="serviceProcePeople != null">
+				serviceProcePeople,
+			</if>
+			<if test="serviceProceTime != null">
+				serviceProceTime,
+			</if>
+			<if test="serviceProceResult != null">
+				serviceProceResult,
+			</if>
+			<if test="myd != null">
+				myd,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			
+			<if test="serveType != null">
+				#{serveType,jdbcType=VARCHAR},
+			</if>
+			<if test="overview != null">
+				#{overview,jdbcType=VARCHAR},
+			</if>
+			<if test="customer != null">
+				#{customer,jdbcType=VARCHAR},
+			</if>
+			<if test="state != null">
+				#{state,jdbcType=VARCHAR},
+			</if>
+			<if test="servicerequest != null">
+				#{servicerequest,jdbcType=VARCHAR},
+			</if>
+			<if test="createPeople != null">
+				#{createPeople,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="assigner != null">
+				#{assigner,jdbcType=VARCHAR},
+			</if>
+			<if test="assignTime != null">
+				#{assignTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="serviceProce != null">
+				#{serviceProce,jdbcType=VARCHAR},
+			</if>
+			<if test="serviceProcePeople != null">
+				#{serviceProcePeople,jdbcType=VARCHAR},
+			</if>
+			<if test="serviceProceTime != null">
+				#{serviceProceTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="serviceProceResult != null">
+				#{serviceProceResult,jdbcType=VARCHAR},
+			</if>
+			<if test="myd != null">
+				#{myd,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="change.crm.mapper.CustomerMapper">
+
+	<!-- 定义基本的sql语句 -->
+	<sql id="baseCustomerSql">
+
+		select 
+		id,khno,name,area,cusManager,level,myd,xyd,address,postCode,phone,fax,webSite,
+		yyzzzch,fr,nyye,khyh,khzh,dsdjh,gsdjh,state from t_customer
+	</sql>
+
+	<!-- 普通插入的操作实现 -->
+	<insert id="saveObject" parameterType="customer">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			select
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into t_customer
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="khno!=null and khno!=''">khno ,</if>
+			<if test="name!=null and name!=''">name ,</if>
+			<if test="area!=null and area!=''">area ,</if>
+			<if test="cusManager!=null and cusManager!=''">cusManager ,</if>
+			<if test="level!=null and level!=''">level ,</if>
+			<if test="myd!=null and myd!=''">myd ,</if>
+			<if test="xyd!=null and xyd!=''">xyd ,</if>
+			<if test="address!=null and address!=''">address ,</if>
+			<if test="postCode!=null and postCode!=''">postCode ,</if>
+			<if test="phone!=null and phone!=''">phone ,</if>
+			<if test="fax!=null and fax!=''">fax ,</if>
+			<if test="webSite!=null and webSite!=''">webSite ,</if>
+			<if test="yyzzzch!=null and yyzzzch!=''">yyzzzch ,</if>
+			<if test="fr!=null and fr!=''">fr ,</if>
+			<if test="nyye!=null and nyye!=''">nyye ,</if>
+			<if test="khyh!=null and khyh!=''">khyh ,</if>
+			<if test="khzh!=null and khzh!=''">khzh ,</if>
+			<if test="dsdjh!=null and dsdjh!=''">dsdjh ,</if>
+			<if test="gsdjh!=null and gsdjh!=''">gsdjh ,</if>
+			<if test="state!=null and state!=''">state </if>
+			
+
+		</trim>
+		<trim prefix="values(" suffix=")" suffixOverrides=",">
+			<if test="khno!=null and khno!=''">#{khno },</if>
+			<if test="name!=null and name!=''">#{name },</if>
+			<if test="area!=null and area!=''">#{area },</if>
+			<if test="cusManager!=null and cusManager!=''">#{cusManager },</if>
+			<if test="level!=null and level!=''">#{level} ,</if>
+			<if test="myd!=null and myd!=''">#{myd} ,</if>
+			<if test="xyd!=null and xyd!=''">#{xyd },</if>
+			<if test="address!=null and address!=''">#{address },</if>
+			<if test="postCode!=null and postCode!=''">#{postCode} ,</if>
+			<if test="phone!=null and phone!=''">#{phone} ,</if>
+			<if test="fax!=null and fax!=''">#{fax },</if>
+			<if test="webSite!=null and webSite!=''">#{webSite} ,</if>
+			<if test="yyzzzch!=null and yyzzzch!=''">#{yyzzzch} ,</if>
+			<if test="fr!=null and fr!=''">#{fr} ,</if>
+			<if test="nyye!=null and nyye!=''">#{nyye },</if>
+			<if test="khyh!=null and khyh!=''">#{khyh} ,</if>
+			<if test="khzh!=null and khzh!=''">#{khzh} ,</if>
+			<if test="dsdjh!=null and dsdjh!=''">#{dsdjh} ,</if>
+			<if test="gsdjh!=null and gsdjh!=''">#{gsdjh} ,</if>
+			<if test="state!=null and state!=''">#{state }</if>
+
+		</trim>
+	</insert>
+
+	<update id="updateObject" parameterType="customer">
+		update t_customer
+		<trim prefix="set" suffix=" where " suffixOverrides=",">
+			<if test="khno!=null and khno!=''">khno=#{khno },</if>
+			<if test="name!=null and name!=''">name=#{name },</if>
+			<if test="area!=null and area!=''">area=#{area },</if>
+			<if test="cusManager!=null and cusManager!=''">cusManager=#{cusManager },</if>
+			<if test="level!=null and level!=''">level=#{level} ,</if>
+			<if test="myd!=null and myd!=''">myd=#{myd} ,</if>
+			<if test="xyd!=null and xyd!=''">xyd=#{xyd },</if>
+			<if test="address!=null and address!=''">address=#{address },</if>
+			<if test="postCode!=null and postCode!=''">postCode=#{postCode} ,</if>
+			<if test="phone!=null and phone!=''">phone=#{phone} ,</if>
+			<if test="fax!=null and fax!=''">fax=#{fax },</if>
+			<if test="webSite!=null and webSite!=''">webSite=#{webSite} ,</if>
+			<if test="yyzzzch!=null and yyzzzch!=''">yyzzzch=#{yyzzzch} ,</if>
+			<if test="fr!=null and fr!=''">fr=#{fr} ,</if>
+			<if test="nyye!=null and nyye!=''">nyye=#{nyye },</if>
+			<if test="khyh!=null and khyh!=''">khyh=#{khyh} ,</if>
+			<if test="khzh!=null and khzh!=''">khzh=#{khzh} ,</if>
+			<if test="dsdjh!=null and dsdjh!=''">dsdjh=#{dsdjh} ,</if>
+			<if test="gsdjh!=null and gsdjh!=''">gsdjh=#{gsdjh} ,</if>
+			<if test="state!=null and state!=''">state=#{state }</if>
+		</trim>
+		id= #{id}
+	</update>
+
+	<!-- 根据实体对象删除实体 -->
+	<delete id="deleteObject" parameterType="customer">
+		delete from t_customer
+		where id = #{id}
+	</delete>
+	<!-- 根据id删除实体 -->
+	<delete id="deleteObjectById" parameterType="int">
+		delete from
+		t_customer where id = #{id}
+	</delete>
+
+
+
+	<!-- 根据id查询单个实体对象 -->
+	<select id="getObjectById" parameterType="int" resultType="customer">
+		<!-- 引入指定的sql语句 -->
+		<include refid="baseCustomerSql" />
+		where id=#{id}
+	</select>
+	<!-- 带条件的获取所有数据 -->
+	<select id="getObjects" parameterType="queryVo" resultType="customer">
+		<!-- 引入指定的sql语句 -->
+		<include refid="baseCustomerSql" />
+		<where>
+			<!-- 拼接sql语句 -->
+			<if test="entity!=null">
+				<if test="entity.name!=null and entity.name!=''">
+					and name like '%${entity.name}%'
+				</if>
+				<!-- 其它条件 -->
+				<if test="entity.address!=null and entity.address!=''">
+					and address like '%${entity.address}%'
+				</if>
+				
+			</if>
+		</where>
+
+		<!-- 排序的操作 -->
+		<if test="sort!=null and desc!=null">
+			order by ${sort} ${desc}
+		</if>
+		<!-- 分页拼装 -->
+		<if test="startSize!=null and pageSize!=null">
+			limit #{startSize},#{pageSize}
+		</if>
+	</select>
+
+	<!-- 带条件的获取总计路数 -->
+	<select id="getObjectsSize" parameterType="queryVo" resultType="int">
+		<!-- 引入指定的sql语句 -->
+		select count(*) from t_customer
+		<where>
+			<!-- 拼接sql语句 -->
+			<if test="entity!=null">
+				<if test="entity.name!=null and entity.name!=''">
+					and name like '%${entity.name}%'
+				</if>
+				<!-- 其它条件 -->
+				<if test="entity.address!=null and entity.address!=''">
+					and address like '%${entity.address}%'
+				</if>
+				<if test="entity.khno!=null and entity.khno!=''">
+					and khno like '%${entity.khno}%'
+				</if>
+				
+			</if>
+		</where>
+	</select>
+
+
+</mapper>

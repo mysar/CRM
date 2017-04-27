@@ -1,0 +1,12 @@
+.fixed-table-container thead th .th-inner, .fixed-table-container tbody td .th-inner {
+            line-height: 18px;
+        }
+
+        .fixed-table-pagination .pagination a {
+            padding: 5px 10px;
+        }
+
+        .fixed-table-toolbar .bars, .fixed-table-toolbar .search, .fixed-table-toolbar .columns {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }

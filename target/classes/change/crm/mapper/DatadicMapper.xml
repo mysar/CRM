@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="change.crm.mapper.DatadicMapper">
+
+	<sql id="baseSql">
+		select * from t_datadic
+	</sql>
+	
+	
+	<insert id="saveObject" parameterType="datadic">
+		insert into t_datadic values(null,#{dataDicName},#{dataDicValue})
+	</insert>
+	<!-- 根据id查询单个实体对象 -->
+	<select id="getObjectById" parameterType="int" resultType="datadic">
+		<include refid="baseSql" />
+		where id=#{id}
+	</select>
+	
+	<!-- 根据name查询单个实体对象 -->
+	<select id="getObjectsByName" parameterType="string" resultType="datadic">
+		<include refid="baseSql" />
+		where name=#{name}
+	</select>
+
+	<select id="getObjects" parameterType="queryVo" resultType="datadic">
+		<include refid="baseSql" />
+		<where>
+			<if test="entity!=null">
+				<!-- 拼接sql语句 -->
+				<if test="entity.dataDicValue != null">
+					and dataDicValue like '%${entity.dataDicValue}%'
+				</if>
+			</if>
+		</where>
+
+		<!-- 排序的操作 -->
+		<if test="sort!=null and desc!=null">
+			order by ${sort} ${desc}
+		</if>
+		<!-- 分页拼装 -->
+		<if test="startSize!=null and pageSize!=null">
+			limit #{startSize},#{pageSize}
+		</if>
+	</select>
+
+	<select id="getObjectsSize" parameterType="queryVo" resultType="int">
+		<!-- 引入指定的sql语句 -->
+		select count(*) from t_datadic
+		<where>
+			<!-- 拼接sql语句 -->
+			<if test="entity.dataDicValue != null and entity.dataDicValue !=''">
+				and dataDicValue like '%${entity.dataDicValue}%'
+			</if>
+			
+		</where>
+	</select>
+	
+	<delete id="deleteObjectById" parameterType="Integer">
+		delete from t_datadic where id=#{id}
+	</delete>
+</mapper>

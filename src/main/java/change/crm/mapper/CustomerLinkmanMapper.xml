@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="change.crm.mapper.CustomerLinkmanMapper">
+
+	<sql id="baseCustomerLinkmanSql">
+		select id,cusId,linkName,sex,zhiwei,officePhone,phone from
+		t_customer_linkman
+	</sql>
+	<insert id="saveObject" parameterType="customerlinkman">
+		<!-- selectKey将主键返回，需要再返回 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			select
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into t_customer_linkman
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="cusId!=null and cusId!=''">cusId ,</if>
+			<if test="linkName!=null and linkName!=''">linkName ,</if>
+			<if test="sex!=null and sex!=''">sex ,</if>
+			<if test="zhiwei!=null and zhiwei!=''">zhiwei ,</if>
+			<if test="officePhone!=null and officePhone!=''">officePhone ,</if>
+			<if test="phone!=null and phone!=''">phone ,</if>
+		</trim>
+		<trim prefix="values(" suffix=")" suffixOverrides=",">
+			<if test="cusId!=null and cusId!=''">${cusId} ,</if>
+			<if test="linkName!=null and linkName!=''">${linkName} ,</if>
+			<if test="sex!=null and sex!=''">${sex} ,</if>
+			<if test="zhiwei!=null and zhiwei!=''">${zhiwei} ,</if>
+			<if test="officePhone!=null and officePhone!=''">${officePhone} ,</if>
+			<if test="phone!=null and phone!=''">${phone} ,</if>
+		</trim>
+	</insert>
+	<update id="updateObject" parameterType="customerlinkman">
+		UPDATE t_customer_linkman
+		<trim prefix="set" suffixOverrides=",">
+			<if test="cusId!=null and cusId!=''">cusId=#{cusId},</if>
+			<if test="linkName!=null and linkName!=''">linkName=#{linkName},</if>
+			<if test="sex!=null and sex!=''">sex=#{sex},</if>
+			<if test="zhiwei!=null and zhiwei!=''">zhiwei=#{zhiwei},</if>
+			<if test="officePhone!=null and officePhone!=''">officePhone=#{officePhone},</if>
+			<if test="phone!=null and phone!=''">phone=#{phone},</if>
+		</trim>
+		WHERE id=#{id}
+	</update>
+	<delete id="deleteObjectById" parameterType="int">delete from
+		t_customer_linkman
+		where id=#{id}
+	</delete>
+	<select id="getObjectById" parameterType="int" resultType="customerlinkman">
+		<!-- 引入指定的sql语句 -->
+		<include refid="baseCustomerLinkmanSql" />
+		where id=#{id}
+	</select>
+
+	<select id="getObjects" parameterType="queryVo" resultType="customerlinkman">
+		<!-- 引入指定的sql语句 -->
+		<include refid="baseCustomerLinkmanSql" />
+		<where>
+			<!-- 拼接sql语句 -->
+			<if test="entity!=null">
+				<if test="entity.cusId!=null and entity.cusId!=''">
+					and cusId =#{entity.cusId}
+				</if>
+				<if test="entity.linkName!=null and entity.linkName!=''">
+					and linkName = #{entity.linkName}
+				</if>
+				<!-- 其它条件 -->
+				<if test="entity.sex!=null and entity.sex!=''">
+					and sex= #{entity.sex}
+				</if>
+				<if test="entity.zhiwei!=null and entity.zhiwei!=''">
+					and zhiwei= #{entity.zhiwei}
+				</if>
+
+				<if test="entity.officePhone!=null and entity.officePhone!=''">
+					and officePhone= #{entity.officePhone}
+				</if>
+
+				<if test="entity.phone!=null and entity.phone!=''">
+					and phone= #{entity.phone}
+				</if>
+
+
+
+			</if>
+		</where>
+
+		<!-- 排序的操作 -->
+		<if test="sort!=null and desc!=null">
+			order by ${sort} ${desc}
+		</if>
+		<!-- 分页拼装 -->
+		<if test="startSize!=null and pageSize!=null">
+			limit #{startSize},#{pageSize}
+		</if>
+	</select>
+
+	<select id="getObjectsSize" parameterType="queryVo" resultType="int">
+		<!-- 引入指定的sql语句 -->
+		select count(*) from t_customer_linkman
+		<where>
+			<!-- 拼接sql语句 -->
+			<if test="entity!=null">
+				<if test="entity.cusId!=null and entity.cusId!=''">
+					and cusId =#{entity.cusId}
+				</if>
+				<if test="entity.linkName!=null and entity.linkName!=''">
+					and linkName = #{entity.linkName}
+				</if>
+				<!-- 其它条件 -->
+				<if test="entity.sex!=null and entity.sex!=''">
+					and sex= #{entity.sex}
+				</if>
+				<if test="entity.zhiwei!=null and entity.zhiwei!=''">
+					and sex= #{entity.zhiwei}
+				</if>
+
+				<if test="entity.officePhone!=null and entity.officePhone!=''">
+					and sex= #{entity.officePhone}
+				</if>
+
+				<if test="entity.phone!=null and entity.phone!=''">
+					and sex= #{entity.phone}
+				</if>
+
+
+			</if>
+		</where>
+	</select>
+	
+</mapper>

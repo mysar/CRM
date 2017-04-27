@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="change.crm.mapper.PlanMapper">
+	
+	<resultMap type="Plan" id="PlanResult">
+		<result property="id" column="id"/>
+		<result property="planItem" column="planItem"/>
+		<result property="planDate" column="planDate"/>
+		<result property="exeAffect" column="exeAffect"/>
+		<association property="saleChance" column="saleChanceId" select="change.crm.mapper.ChanceMapper.getObjectById"></association>
+	</resultMap>
+	
+	<!-- 定义基本的sql语句 -->
+	<sql id="basePlanSql">
+		select * from t_cus_dev_plan
+	</sql>
+	
+	<insert id="saveObject" parameterType="Plan">
+		insert into t_cus_dev_plan values(null,#{saleChance.id},#{planItem},#{planDate},#{exeAffect})
+	</insert>
+	<!-- 根据id查询单个实体对象 -->
+	<select id="getObjectById" parameterType="Map" resultMap="PlanResult">
+		<!-- 引入指定的sql语句 -->
+		<include refid="basePlanSql" />
+		<where>
+			<if test="saleChanceId!=null and saleChanceId!='' ">
+				and saleChanceId = #{saleChanceId}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 根据name查询单个实体对象 -->
+	<select id="getObjectsByName" parameterType="string" resultMap="PlanResult">
+		<!-- 引入指定的sql语句 -->
+		<include refid="basePlanSql" />
+		where name=#{name}
+	</select>
+	
+	<!--查询所有实体对象 -->
+	<select id="getAllObjects"  resultType="plan">
+		<!-- 引入指定的sql语句 -->
+		select
+		id,userName,password,trueName,email,phone,roleName
+		from t_cus_dev_plan
+	</select>
+
+	<select id="getObjects" parameterType="queryVo" resultMap="PlanResult">
+		<!-- 引入指定的sql语句 -->
+		<include refid="basePlanSql" />
+		<where>
+			<!-- 拼接sql语句 -->
+			 <if test="entity!=null">
+				
+			</if>
+		</where>
+
+		<!-- 排序的操作 -->
+		<if test="sort!=null and desc!=null">
+			order by ${sort} ${desc}
+		</if>
+		<!-- 分页拼装 -->
+		<if test="startSize!=null and pageSize!=null">
+			limit #{startSize},#{pageSize}
+		</if>
+	</select>
+
+	<select id="getObjectsSize" parameterType="queryVo" resultType="int">
+		<!-- 引入指定的sql语句 -->
+		select count(*) from t_cus_dev_plan
+		<where>
+			<!-- 拼接sql语句 -->
+			
+		</where>
+	</select>
+	
+	<delete id="deleteObjectById" parameterType="Integer">
+		delete from t_cus_dev_plan where id=#{id}
+	</delete>
+
+
+</mapper>
